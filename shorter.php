@@ -2,21 +2,34 @@
 
 const FILE_STORAGE = 'storage.json';
 
-empty($_GET['url']) ?: $longurl = $_GET['url'];
-empty($_POST['url']) ?: $longurl = $_POST['url'];
+empty($_GET['url']) ?: $longurl[0] = $_GET['url'];
+
+if (!empty($_POST['url'])) {
+    if (is_string($_POST['url'])) {
+        $longurl[0] = $_POST['url'];
+    } elseif (is_array($_POST['url'])) {
+        $longurl = $_POST['url'];
+    }
+}
 
 if (empty($longurl)) {
     die('error');
 }
 
-$shorturl = base_convert(crc32($longurl), 20, 36);
-
+$response = [];
+$array = [];
 if (file_exists(FILE_STORAGE)) {
     $array = json_decode(file_get_contents(FILE_STORAGE), true);
-    $array[$shorturl] = $longurl;
-    file_put_contents(FILE_STORAGE, json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-} else {
-    file_put_contents(FILE_STORAGE, json_encode([$shorturl => $longurl], JSON_PRETTY_PRINT| JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 }
 
-echo((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/' . $shorturl;
+foreach ($longurl as $url) {
+    $shorturl = base_convert(crc32($url), 20, 36);
+    $array[$shorturl] = $url;
+    $response[] = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/' . $shorturl;
+}
+file_put_contents(FILE_STORAGE, json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+if (count($response) > 1) {
+    echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+} else {
+    echo $response[0];
+}
