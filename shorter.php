@@ -9,7 +9,7 @@ if (empty($longurl)) {
     die('error');
 }
 
-$shorturl = base_convert($longurl, 20, 36);
+$shorturl = base_convert(crc32($longurl), 20, 36);
 
 if (file_exists(FILE_STORAGE)) {
     $array = json_decode(file_get_contents(FILE_STORAGE), true);
