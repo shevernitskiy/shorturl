@@ -1,0 +1,4 @@
+Options -Indexes
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !shorter.php
+RewriteRule ^(.*)$ decoder.php?url=$1 [QSA,L]

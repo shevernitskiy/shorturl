@@ -1,0 +1,21 @@
+<?php
+
+const FILE_STORAGE = 'storage.json';
+
+empty($_GET['url']) ?: $longurl = $_GET['url'];
+empty($_POST['url']) ?: $longurl = $_POST['url'];
+
+if (empty($longurl)) {
+    die('Empty url');
+}
+
+$shorturl = base_convert($longurl, 20, 36);
+echo $shorturl;
+
+if (file_exists(FILE_STORAGE)) {
+    $array = json_decode(file_get_contents(FILE_STORAGE), true);
+    $array[$shorturl] = $longurl;
+    file_put_contents(FILE_STORAGE, json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+} else {
+    file_put_contents(FILE_STORAGE, json_encode([$shorturl => $longurl], JSON_PRETTY_PRINT| JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+}
