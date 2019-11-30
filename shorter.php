@@ -10,7 +10,7 @@ if (empty($longurl)) {
 }
 
 $shorturl = base_convert($longurl, 20, 36);
-echo $shorturl;
+echo((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']).'/'.$shorturl;
 
 if (file_exists(FILE_STORAGE)) {
     $array = json_decode(file_get_contents(FILE_STORAGE), true);
