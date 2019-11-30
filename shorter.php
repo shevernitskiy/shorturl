@@ -10,7 +10,6 @@ if (empty($longurl)) {
 }
 
 $shorturl = base_convert($longurl, 20, 36);
-echo((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']).'/'.$shorturl;
 
 if (file_exists(FILE_STORAGE)) {
     $array = json_decode(file_get_contents(FILE_STORAGE), true);
@@ -19,3 +18,5 @@ if (file_exists(FILE_STORAGE)) {
 } else {
     file_put_contents(FILE_STORAGE, json_encode([$shorturl => $longurl], JSON_PRETTY_PRINT| JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 }
+
+echo((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/' . $shorturl;
