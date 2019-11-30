@@ -2,7 +2,8 @@
 
 $data = ['url' => [
     'https://web.whatsapp.com/',
-    'http://95.165.98.14/addlink.php'
+    'http://95.165.98.14/addlink.php',
+    'https://vk.com/'
     ]
 ];
 
