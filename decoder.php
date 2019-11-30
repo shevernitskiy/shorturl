@@ -3,7 +3,7 @@
 const FILE_STORAGE = 'storage.json';
 
 if (empty($_GET['url'])) {
-    die('Empty url');
+    die('error');
 }
 
 if (file_exists(FILE_STORAGE)) {

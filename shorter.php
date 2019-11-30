@@ -6,7 +6,7 @@ empty($_GET['url']) ?: $longurl = $_GET['url'];
 empty($_POST['url']) ?: $longurl = $_POST['url'];
 
 if (empty($longurl)) {
-    die('Empty url');
+    die('error');
 }
 
 $shorturl = base_convert($longurl, 20, 36);
